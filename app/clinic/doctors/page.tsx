@@ -2,14 +2,18 @@ import { Metadata } from 'next';
 import { PageHeader } from '@/components/page-header';
 import { Section } from '@/components/section';
 import { DoctorCard } from '@/components/doctor-card';
-import { doctors } from '@/lib/doctors-data';
+import { getDoctors } from '@/lib/supabase';
 
 export const metadata: Metadata = {
   title: 'Our Doctors',
   description: 'Meet our experienced team of consultant haematologists specializing in blood disorders.',
 };
 
-export default function DoctorsPage() {
+export const revalidate = 60;
+
+export default async function DoctorsPage() {
+  const doctors = await getDoctors();
+
   return (
     <>
       <PageHeader
@@ -23,7 +27,7 @@ export default function DoctorsPage() {
             <DoctorCard
               key={doctor.slug}
               name={doctor.name}
-              title={`${doctor.title}, ${doctor.postNominals}`}
+              title={`${doctor.title}, ${doctor.post_nominals}`}
               slug={doctor.slug}
               interests={doctor.interests}
               snippet={doctor.snippet}

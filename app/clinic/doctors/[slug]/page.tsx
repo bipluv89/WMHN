@@ -7,16 +7,19 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { doctors } from '@/lib/doctors-data';
+import { getDoctors, getDoctorBySlug } from '@/lib/supabase';
+
+export const revalidate = 60;
 
 export async function generateStaticParams() {
+  const doctors = await getDoctors();
   return doctors.map((doctor) => ({
     slug: doctor.slug,
   }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const doctor = doctors.find((d) => d.slug === params.slug);
+  const doctor = await getDoctorBySlug(params.slug);
 
   if (!doctor) {
     return {
@@ -30,8 +33,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function DoctorDetailPage({ params }: { params: { slug: string } }) {
-  const doctor = doctors.find((d) => d.slug === params.slug);
+export default async function DoctorDetailPage({ params }: { params: { slug: string } }) {
+  const doctor = await getDoctorBySlug(params.slug);
 
   if (!doctor) {
     notFound();
@@ -62,7 +65,7 @@ export default function DoctorDetailPage({ params }: { params: { slug: string } 
                     </Badge>
                   ))}
                 </div>
-                <CardTitle className="text-2xl">{doctor.title}, {doctor.postNominals}</CardTitle>
+                <CardTitle className="text-2xl">{doctor.title}, {doctor.post_nominals}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {doctor.bio.map((paragraph, index) => (

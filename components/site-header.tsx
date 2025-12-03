@@ -113,6 +113,9 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center space-x-4 lg:flex">
+          <Button asChild variant="outline" size="sm">
+            <Link href="/admin/doctors">Admin</Link>
+          </Button>
           <Button asChild className="bg-[#7A1F3D] hover:bg-[#5A1730]">
             <Link href="/referrals">Request an Appointment</Link>
           </Button>
