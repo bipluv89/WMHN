@@ -9,10 +9,11 @@ import { Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react';
 import { supabase, type Doctor } from '@/lib/supabase';
 import { PageHeader } from '@/components/page-header';
 import { Section } from '@/components/section';
+import { AuthGuard } from '@/components/auth-guard';
 
 export const dynamic = 'force-dynamic';
 
-export default function AdminDoctorsPage() {
+function AdminDoctorsContent() {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -167,5 +168,13 @@ export default function AdminDoctorsPage() {
         )}
       </Section>
     </>
+  );
+}
+
+export default function AdminDoctorsPage() {
+  return (
+    <AuthGuard>
+      <AdminDoctorsContent />
+    </AuthGuard>
   );
 }

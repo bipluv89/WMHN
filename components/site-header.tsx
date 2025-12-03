@@ -3,10 +3,11 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, LogOut } from 'lucide-react';
 import { siteConfig } from '@/lib/siteConfig';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/lib/auth-context';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -38,6 +39,7 @@ export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
   const pathname = usePathname();
+  const { user, signOut } = useAuth();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -113,9 +115,26 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center space-x-4 lg:flex">
-          <Button asChild variant="outline" size="sm">
-            <Link href="/admin/doctors">Admin</Link>
-          </Button>
+          {user ? (
+            <>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/admin/doctors">Admin</Link>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => signOut()}
+                className="text-gray-700"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Button asChild variant="outline" size="sm">
+              <Link href="/login">Login</Link>
+            </Button>
+          )}
           <Button asChild className="bg-[#7A1F3D] hover:bg-[#5A1730]">
             <Link href="/referrals">Request an Appointment</Link>
           </Button>

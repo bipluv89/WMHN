@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { siteConfig } from '@/lib/siteConfig';
+import { AuthProvider } from '@/lib/auth-context';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -66,11 +67,13 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
-        </div>
+        <AuthProvider>
+          <div className="flex min-h-screen flex-col">
+            <SiteHeader />
+            <main className="flex-1">{children}</main>
+            <SiteFooter />
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );
